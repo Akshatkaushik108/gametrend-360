@@ -1,0 +1,14 @@
+{
+  "name": "gametrend-360",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Twitch and Steam analytics workspace with live collectors and a polished dashboard.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs",
+    "test": "node --test",
+    "check": "node --check server.mjs && node --check public/app.js && node --check public/data.js"
+  },
+  "engines": { "node": ">=22" }
+}
