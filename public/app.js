@@ -236,7 +236,7 @@ document.addEventListener('click', event => {
     return;
   }
   if (target.dataset.platform) { state.platform = target.dataset.platform; renderMain(); return; }
-  if (target.dataset.sort) { state.direction = state.sort === target.dataset.sort ? -state.direction : -1; state.sort = target.dataset.sort; state.page = 1; renderMain(); return; }
+  if (target.dataset.sort) { state.direction = state.sort === target.dataset.sort ? -state.direction : target.dataset.sort === 'name' ? 1 : -1; state.sort = target.dataset.sort; state.page = 1; renderMain(); return; }
   if (target.dataset.page) { state.page = Number(target.dataset.page); renderMain(); return; }
   switch (target.dataset.action) {
     case 'connections': location.hash = 'connections'; break;
@@ -264,7 +264,7 @@ document.addEventListener('change', event => {
 });
 document.addEventListener('keydown', event => { if (event.key === '/' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName) && !modal.open) { event.preventDefault(); document.getElementById('global-search').focus(); } });
 modal.addEventListener('click', event => { if (event.target === modal) { const rect = modal.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) modal.close(); } });
-function navigate() { const view = location.hash.slice(1); state.view = views[view] ? view : 'overview'; state.page = 1; state.query = ''; state.genre = 'all'; document.getElementById('global-search').value = ''; if (modal.open) modal.close(); renderMain(); window.scrollTo({ top: 0 }); }
+function navigate() { const view = location.hash.slice(1); if (view === 'main') { document.getElementById('main').focus(); return; } state.view = views[view] ? view : 'overview'; state.page = 1; state.query = ''; state.genre = 'all'; document.getElementById('global-search').value = ''; if (modal.open) modal.close(); renderMain(); window.scrollTo({ top: 0 }); }
 window.addEventListener('hashchange', navigate);
 shell(); navigate();
 fetch('/api/status').then(response => { if (!response.ok) throw new Error('Status unavailable'); return response.json(); }).then(status => { state.status = status; if (['connections', 'reports'].includes(state.view)) renderMain(); }).catch(() => { toast('Live backend is unavailable. Sample analysis remains available.'); });
